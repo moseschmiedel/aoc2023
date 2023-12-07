@@ -4,6 +4,7 @@ module Parser
   , parse
   , satisfy
   , many
+  , chomp
   , int
   , digit
   , char
@@ -75,6 +76,9 @@ many p = do
   x <- p
   xs <- many p <|> return []
   return (x:xs)
+
+chomp :: Eq e => Parser e a -> Parser e a
+chomp p = p <|> (satisfy (const True) >> chomp p)
 
 char :: Char -> Parser e Char
 char c = satisfy (== c)
